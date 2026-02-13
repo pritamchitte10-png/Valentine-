@@ -3,26 +3,23 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
-        #text { white-space: pre-wrap; }
-        input { background: #000; color: #0f0; border: none; outline: none; font-family: monospace; font-size: 16px; width: 100%; }
+        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; font-size: 14px; }
+        #text { white-space: pre-wrap; line-height: 1.6; }
+        input { background: #000; color: #0f0; border: none; outline: none; font-family: monospace; font-size: 16px; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div id="text"></div>
-    <div id="input-area" style="display:none">
-        > <input type="text" id="userInput" autofocus>
-    </div>
+    <div id="input-area" style="display:none">> <input type="text" id="userInput" placeholder="Type here..." autofocus></div>
 
 <script>
     const lines = [
-    "> SCANNING BIOMETRICS...", 
-    "> MATCH FOUND: Manali ❤️", 
-    "> ACCESSING CORE_MEMORIES...", 
-    "> OVERRIDING SYSTEM LOCK...", 
-    "> WILL YOU BE MY VALENTINE?"
-];
-
+        "> INITIALIZING VALENTINE_PROTOCOL_2026...",
+        "> SCANNING BIOMETRICS...",
+        "> MATCH FOUND: Manali ❤️",
+        "> BYPASSING SECURITY...",
+        "> WILL YOU BE MY VALENTINE? (Type YES)"
+    ];
     let i = 0;
     function type() {
         if (i < lines.length) {
@@ -39,9 +36,10 @@
     document.getElementById("userInput").addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
             if (this.value.toUpperCase() === "YES") {
-                window.location.href = "Index.html"; // This sends her to your dashboard
+                document.getElementById("text").innerHTML += "<br>> ACCESS GRANTED. LOADING UNIVERSE...";
+                setTimeout(() => { window.location.href = "index.html"; }, 1500);
             } else {
-                alert("ERROR: Try again!");
+                alert("ACCESS DENIED: Try 'YES'");
             }
         }
     });
