@@ -70,6 +70,23 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        document.addEventListener('dblclick', function() {
+    // 1. Change the star colors to a "Love Glow"
+    starMat.color.setHex(0xffb3c1); 
+    
+    // 2. Change the message
+    const msg = document.getElementById('msg');
+    msg.style.transition = "all 1s";
+    msg.style.transform = "scale(1.2)";
+    msg.innerHTML = "<h2>You Found My Secret. ❤️</h2><p>Even if my laptop breaks, even if the world gets confusing, my universe still revolves around you. I love you, [Her Name].</p>";
+
+    // 3. Phone Vibrate (Satisfying haptic)
+    if (window.navigator.vibrate) {
+        window.navigator.vibrate([100, 50, 100]);
+    }
+});
+        
     </script>
 </body>
 </html>
