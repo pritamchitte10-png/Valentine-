@@ -29,9 +29,22 @@
         var stars = new THREE.Points(starGeo, starMat);
         scene.add(stars);
 
-        var core = new THREE.Mesh(new THREE.SphereGeometry(10, 24, 24), new THREE.MeshBasicMaterial({color: 0xff4d6d}));
-        scene.add(core);
-        camera.position.z = 300;
+        // CUTE 3D HEART SHAPE
+var heartShape = new THREE.Shape();
+heartShape.moveTo(0, 0);
+heartShape.bezierCurveTo(0, -3, -5, -15, -20, -15);
+heartShape.bezierCurveTo(-35, -15, -35, 11, -35, 11);
+heartShape.bezierCurveTo(-35, 25, -15, 45, 0, 60);
+heartShape.bezierCurveTo(15, 45, 35, 25, 35, 11);
+heartShape.bezierCurveTo(35, 11, 35, -15, 20, -15);
+heartShape.bezierCurveTo(10, -15, 0, -3, 0, 0);
+
+var geometry = new THREE.ExtrudeGeometry(heartShape, { depth: 8, bevelEnabled: true, bevelSize: 2, bevelThickness: 2 });
+var material = new THREE.MeshBasicMaterial({ color: 0xff4d6d });
+var core = new THREE.Mesh(geometry, material);
+core.rotation.z = Math.PI; // Flip it upright
+scene.add(core);
+        
 
         function animate() {
             requestAnimationFrame(animate);
