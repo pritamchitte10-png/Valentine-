@@ -52,6 +52,12 @@ scene.add(core);
             core.scale.set(1 + Math.sin(Date.now()*0.002)*0.1, 1 + Math.sin(Date.now()*0.002)*0.1, 1);
             renderer.render(scene, camera);
         }
+
+        if (Math.random() > 0.98) { // Occasional shooting star
+    stars.geometry.attributes.position.array[Math.floor(Math.random() * 2000)] += 50;
+    stars.geometry.attributes.position.needsUpdate = true;
+        }
+        
         animate();
 
         let last = 0;
