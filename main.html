@@ -32,15 +32,23 @@
         }
     }
     type();
-
-    document.getElementById("userInput").addEventListener("keypress", function(e) {
-        if (e.key === "Enter") {
-            if (this.value.toUpperCase() === "YES") {
-                document.getElementById("text").innerHTML += "<br>> ACCESS GRANTED. LOADING UNIVERSE...";
-                setTimeout(() => { window.location.href = "Index.html"; }, 1500);
-            } else {
-                alert("ACCESS DENIED: Try 'YES'");
-            }
+document.getElementById("userInput").addEventListener("keypress", function(e) {
+    if (e.key === "Enter" || e.keyCode === 13) {
+        e.preventDefault(); // Prevents iPhone from just refreshing the page
+        const val = this.value.trim().toUpperCase();
+        
+        if (val === "YES") {
+            document.getElementById("text").innerHTML += "<br>> ACCESS GRANTED. LOADING...";
+            // This force-redirects the iPhone
+            window.location.assign("index.html"); 
+        } else {
+            alert("Please type YES to continue.");
+        }
+    }
+});
+    
+    
+            
         }
     });
 </script>
