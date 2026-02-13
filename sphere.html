@@ -5,13 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Our Universe</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #000; }
-        #msg {
-            position: absolute; top: 20px; width: 100%; text-align: center;
-            color: #ff4d6d; font-family: sans-serif; pointer-events: none;
-            text-shadow: 0 0 10px #000; z-index: 10;
-        }
+    body { margin: 0; overflow: hidden; background: #000; font-family: sans-serif; }
+    
+    #msg {
+        position: absolute;
+        top: 50%; /* Moves it to the center */
+        left: 50%;
+        transform: translate(-50%, -50%); /* Perfectly centers it */
+        width: 85%; /* Gives it some breathing room on the sides */
+        max-height: 80vh; /* Prevents it from going off-screen */
+        overflow-y: auto; /* Adds a scroll if the message is huge */
+        text-align: center;
+        color: #ff4d6d;
+        pointer-events: none; /* Allows her to still touch the stars behind it */
+        text-shadow: 0 0 15px rgba(0,0,0,0.8);
+        z-index: 10;
+        transition: all 0.8s ease-in-out;
+    }
+
+    h2 { font-size: 1.8rem; margin-bottom: 10px; }
+    p { font-size: 1.1rem; line-height: 1.4; }
     </style>
+    
+    
 </head>
 <body>
     <div id="msg">
@@ -72,15 +88,20 @@
         });
 
         document.addEventListener('dblclick', function() {
-    // 1. Change the star colors to a "Love Glow"
     starMat.color.setHex(0xffb3c1); 
     
-    // 2. Change the message
     const msg = document.getElementById('msg');
-    msg.style.transition = "all 1s";
-    msg.style.transform = "scale(1.2)";
-    msg.innerHTML = "<h2>You Found My Secret. ❤️</h2><p>Even if my laptop breaks, even if the world gets confusing, my universe still revolves around you. I love you, [Her Name].</p>";
-
+    // We enable pointer events so she can scroll the text if it's long
+    msg.style.pointerEvents = "auto"; 
+    
+    msg.innerHTML = `
+        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 20px; border: 1px solid #ff4d6d;">
+            <h2>The Secret Star ❤️</h2>
+            <p>Even if my laptop broke, I am broke and i already hurt you alot and I love you so much and i will love you forever. My heart didn't skip a beat. I built this galaxy on my phone because you deserve the universe. I love you, Babe!</p>
+        </div>
+    `;
+});
+        
     // 3. Phone Vibrate (Satisfying haptic)
     if (window.navigator.vibrate) {
         window.navigator.vibrate([100, 50, 100]);
