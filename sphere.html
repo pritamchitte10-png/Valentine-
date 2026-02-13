@@ -3,10 +3,15 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; }
-        #msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; text-align: center; color: #ff4d6d; z-index: 10; pointer-events: none; }
-        .secret { display: none; background: rgba(0,0,0,0.7); padding: 20px; border-radius: 20px; border: 1px solid #ff4d6d; }
+    .secret { 
+        display: none; 
+        background: rgba(0,0,0,0.8); 
+        padding: 20px; 
+        border-radius: 20px; 
+        border: 1px solid #ff4d6d; 
+    }
     </style>
+    
 </head>
 <body>
     <div id="msg">
@@ -14,22 +19,26 @@
         <div id="secret" class="secret"><h2>The Secret Star ❤️</h2><p>Even though my laptop broke, I coded this on my phone because you deserve the universe. I love you so much BABE!</p></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+    // REPLACE YOUR EXISTING SCRIPT WITH THIS:
 
-        var starGeo = new THREE.BufferGeometry();
-        var starVex = [];
-        for(let i=0; i<2000; i++) { starVex.push((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, (Math.random()-0.5)*1000); }
-        starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVex, 3));
-        var starMat = new THREE.PointsMaterial({color: 0xffffff, size: 1.2});
-        var stars = new THREE.Points(starGeo, starMat);
-        scene.add(stars);
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+var renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-        // CUTE 3D HEART SHAPE
+// --- 1. THE STARS ---
+var starGeo = new THREE.BufferGeometry();
+var starVex = [];
+for(let i=0; i<2000; i++) { 
+    starVex.push((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, (Math.random()-0.5)*1000); 
+}
+starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVex, 3));
+var starMat = new THREE.PointsMaterial({color: 0xffffff, size: 1.2});
+var stars = new THREE.Points(starGeo, starMat);
+scene.add(stars);
+
+// --- 2. THE CUTE 3D HEART (Scaled Down) ---
 var heartShape = new THREE.Shape();
 heartShape.moveTo(0, 0);
 heartShape.bezierCurveTo(0, -3, -5, -15, -20, -15);
@@ -39,37 +48,43 @@ heartShape.bezierCurveTo(15, 45, 35, 25, 35, 11);
 heartShape.bezierCurveTo(35, 11, 35, -15, 20, -15);
 heartShape.bezierCurveTo(10, -15, 0, -3, 0, 0);
 
-var geometry = new THREE.ExtrudeGeometry(heartShape, { depth: 8, bevelEnabled: true, bevelSize: 2, bevelThickness: 2 });
+var geometry = new THREE.ExtrudeGeometry(heartShape, { depth: 4, bevelEnabled: true, bevelSize: 1, bevelThickness: 1 });
 var material = new THREE.MeshBasicMaterial({ color: 0xff4d6d });
 var core = new THREE.Mesh(geometry, material);
-core.rotation.z = Math.PI; // Flip it upright
+
+// IMPORTANT: Shrink the heart and flip it!
+core.scale.set(0.5, 0.5, 0.5); 
+core.rotation.z = Math.PI; 
+core.position.y = 15; // Centering it better
 scene.add(core);
+
+camera.position.z = 250; // Move camera back to see the whole heart
+
+// --- 3. ANIMATION ---
+function animate() {
+    requestAnimationFrame(animate);
+    stars.rotation.y += 0.001;
+    core.rotation.y += 0.02; // Make the heart spin!
+    
+    // Smooth Pulse
+    let pulse = 0.5 + Math.sin(Date.now()*0.002)*0.05;
+    core.scale.set(pulse, pulse, pulse);
+    
+    renderer.render(scene, camera);
+}
+animate();
+
+// --- 4. TOUCH LOGIC ---
+let last = 0;
+document.addEventListener('touchend', (e) => {
+    let now = Date.now();
+    if (now - last < 300) {
+        starMat.color.setHex(0xffb3c1);
+        document.getElementById('hint').style.display = 'none';
+        document.getElementById('secret').style.display = 'block'; // Only shows on double tap
+    }
+    last = now;
+});
         
-
-        function animate() {
-            requestAnimationFrame(animate);
-            stars.rotation.y += 0.001;
-            core.scale.set(1 + Math.sin(Date.now()*0.002)*0.1, 1 + Math.sin(Date.now()*0.002)*0.1, 1);
-            renderer.render(scene, camera);
-        }
-
-        if (Math.random() > 0.98) { // Occasional shooting star
-    stars.geometry.attributes.position.array[Math.floor(Math.random() * 2000)] += 50;
-    stars.geometry.attributes.position.needsUpdate = true;
-        }
-        
-        animate();
-
-        let last = 0;
-        document.addEventListener('touchend', (e) => {
-            let now = Date.now();
-            if (now - last < 300) {
-                starMat.color.setHex(0xffb3c1);
-                document.getElementById('hint').style.display = 'none';
-                document.getElementById('secret').style.display = 'block';
-            }
-            last = now;
-        });
-    </script>
 </body>
 </html>
