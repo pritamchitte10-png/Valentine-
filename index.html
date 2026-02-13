@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Favorite Person</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ffccd5;
+            --text: #ffffff;
+        }
+
+        body { 
+            margin: 0; 
+            padding: 0;
+            background: #000; /* Deep black for that 'hacker' mystery look */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 40px 20px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(255, 77, 109, 0.3);
+            z-index: 10;
+            animation: fadeIn 2s ease-in;
+        }
+
+        h1 { color: var(--primary); font-size: 2rem; margin-bottom: 10px; }
+        p { color: var(--text); font-size: 1.1rem; line-height: 1.5; opacity: 0.9; }
+
+        .counter {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 20px 0;
+            display: block;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 25px;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4);
+            transition: 0.3s;
+        }
+
+        /* Heart Animation */
+        .heart {
+            position: absolute;
+            top: -10%;
+            color: var(--primary);
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <h1>Hi [Name] ❤️</h1>
+        <p>I couldn't let a broken laptop stop me from reaching you today...</p>
+        
+        <div class="counter" id="days-together">Calculating our time...</div>
+        
+        <p>You've officially unlocked the next level of our journey.</p>
+        
+        <a href="sphere.html" class="btn">Launch Our Galaxy</a>
+    </div>
+
+    <script>
+        // 1. HEART RAIN LOGIC
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // 2. AUTOMATIC DAYS COUNTER
+        // !!! CHANGE THE DATE BELOW TO YOUR ANNIVERSARY (YYYY-MM-DD) !!!
+        const startDate = new Date('2023-01-01'); 
+        const today = new Date();
+        const diffInMs = Math.abs(today - startDate);
+        const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+        
+        document.getElementById('days-together').innerText = diffInDays + " Days of Us";
+    </script>
+</body>
+</html>
