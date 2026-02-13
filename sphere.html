@@ -2,67 +2,56 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Our Universe</title>
     <style>
-    body { margin: 0; overflow: hidden; background: #000; font-family: sans-serif; }
-    
-    #msg {
-        position: absolute;
-        top: 50%; /* Moves it to the center */
-        left: 50%;
-        transform: translate(-50%, -50%); /* Perfectly centers it */
-        width: 85%; /* Gives it some breathing room on the sides */
-        max-height: 80vh; /* Prevents it from going off-screen */
-        overflow-y: auto; /* Adds a scroll if the message is huge */
-        text-align: center;
-        color: #ff4d6d;
-        pointer-events: none; /* Allows her to still touch the stars behind it */
-        text-shadow: 0 0 15px rgba(0,0,0,0.8);
-        z-index: 10;
-        transition: all 0.8s ease-in-out;
-    }
-
-    h2 { font-size: 1.8rem; margin-bottom: 10px; }
-    p { font-size: 1.1rem; line-height: 1.4; }
+        body { margin: 0; overflow: hidden; background: #000; font-family: sans-serif; }
+        #msg {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 85%; text-align: center; color: #ff4d6d; z-index: 10;
+            pointer-events: none; transition: all 0.8s ease;
+        }
+        .secret-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px; border-radius: 20px; border: 1px solid #ff4d6d;
+            display: none; /* Hidden until double tap */
+        }
     </style>
-    
-    
 </head>
 <body>
     <div id="msg">
-        <h2>You are my universe.</h2>
-        <p>Tilt or swipe to explore our stars.</p>
+        <div id="normal-text">
+            <h2>You are my universe.</h2>
+            <p>Swipe to explore... <br> (Try double-tapping the stars)</p>
+        </div>
+        <div id="secret-text" class="secret-box">
+            <h2>The Secret Star ❤️</h2>
+            <p>I built this galaxy on my phone because you deserve the universe. I love you, BABE! MY EVERYTHING!</p>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
     <script>
         var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
         var renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Create Stars
+        // STARS
         var starGeo = new THREE.BufferGeometry();
-        var starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.8 });
         var starVex = [];
         for (var i = 0; i < 2000; i++) {
-            starVex.push((Math.random() - 0.5) * 1500);
-            starVex.push((Math.random() - 0.5) * 1500);
-            starVex.push((Math.random() - 0.5) * 1500);
+            starVex.push((Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500);
         }
         starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVex, 3));
+        var starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 1.5 });
         var stars = new THREE.Points(starGeo, starMat);
         scene.add(stars);
 
-        // Create the Heart/Core
-        var coreGeo = new THREE.SphereGeometry(10, 24, 24);
-        var coreMat = new THREE.MeshBasicMaterial({ color: 0xff4d6d });
-        var core = new THREE.Mesh(coreGeo, coreMat);
+        // CORE HEART
+        var core = new THREE.Mesh(new THREE.SphereGeometry(12, 24, 24), new THREE.MeshBasicMaterial({ color: 0xff4d6d }));
         scene.add(core);
-
         camera.position.z = 400;
 
         function animate() {
@@ -73,41 +62,27 @@
         }
         animate();
 
-        // Mobile Touch Support
-        document.addEventListener('touchmove', function(e) {
-            var touch = e.touches[0];
-            stars.rotation.x += (touch.pageY - window.innerHeight/2) * 0.00001;
-            stars.rotation.y += (touch.pageX - window.innerWidth/2) * 0.00001;
+        // DOUBLE TAP LOGIC FOR MOBILE
+        let lastTap = 0;
+        document.addEventListener('touchend', function (e) {
+            let currentTime = new Date().getTime();
+            let tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                // SUCCESSFUL DOUBLE TAP
+                starMat.color.setHex(0xffb3c1);
+                document.getElementById('normal-text').style.display = 'none';
+                document.getElementById('secret-text').style.display = 'block';
+                if (navigator.vibrate) navigator.vibrate(100);
+                e.preventDefault();
+            }
+            lastTap = currentTime;
         });
 
-        // Handle Resize
         window.addEventListener('resize', function() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        document.addEventListener('dblclick', function() {
-    starMat.color.setHex(0xffb3c1); 
-    
-    const msg = document.getElementById('msg');
-    // We enable pointer events so she can scroll the text if it's long
-    msg.style.pointerEvents = "auto"; 
-    
-    msg.innerHTML = `
-        <div style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 20px; border: 1px solid #ff4d6d;">
-            <h2>The Secret Star ❤️</h2>
-            <p>Even if my laptop broke, I am broke and i already hurt you alot and I love you so much and i will love you forever. My heart didn't skip a beat. I built this galaxy on my phone because you deserve the universe. I love you, Babe!</p>
-        </div>
-    `;
-});
-        
-    // 3. Phone Vibrate (Satisfying haptic)
-    if (window.navigator.vibrate) {
-        window.navigator.vibrate([100, 50, 100]);
-    }
-});
-        
     </script>
 </body>
 </html>
