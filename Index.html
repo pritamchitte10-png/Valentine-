@@ -1,47 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Timeline</title>
     <style>
-        body { margin: 0; background: #1a1a1a; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Arial', sans-serif; }
+        /* Force full screen and prevent iPhone scroll bounce */
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+            background-color: #121212; 
+        }
+
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+        }
+
+        /* The Glass Card - Fixed for iPhone Safari */
         .glass-card {
+            position: relative;
+            z-index: 10;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
-            text-align: center; color: white; width: 80%; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-        }
-        .btn {
-            background: #ff4d6d; color: white; border: none; padding: 15px 30px;
-            border-radius: 50px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 20px;
-        }
-        .heart { position: absolute; color: #ff4d6d; pointer-events: none; animation: fall 3s linear; }
-        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-    </style>
-</head>
-<body>
-    <div class="glass-card">
-        <h1>Hi Princess ❤️</h1>
-        <p id="counter">Loading our time...</p>
-        <a href="sphere.html" class="btn">Enter Our Galaxy</a>
-    </div>
-
-<script>
-    function updateCounter() {
-        const start = new Date("2019-05-26"); // UPDATE YOUR DATE HERE
-        const now = new Date();
-        const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-        document.getElementById("counter").innerHTML = `We have been together for <b>${diff}</b> beautiful days.`;
-    }
-    updateCounter();
-
-    setInterval(() => {
-        const heart = document.createElement("div");
-        heart.innerHTML = "❤️"; heart.className = "heart";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = Math.random() * 20 + 10 + "px";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 3000);
-    }, 400);
-</script>
-</body>
-</html>
+            /* Safari blur support */
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            padding: 35px 25px; 
+            border-radius: 30px; 
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center; 
+            color: white; 
+            width: 80%; 
+            max-width: 400px;
+            box-shadow: 0 15px 35px rgba(0,0,
+                                         
