@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Favorite Person</title>
     <style>
+        .glass-card::before {
+    content: '';
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+        }
+        
         :root {
             --primary: #ff4d6d;
             --secondary: #ffccd5;
@@ -99,6 +111,16 @@ transform-style: preserve-3d;
     </div>
 
     <script>
+
+        const card = document.querySelector('.glass-card');
+card.addEventListener('touchmove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const y = e.touches[0].clientY - rect.top;
+    card.style.setProperty('--x', `${x}px`);
+    card.style.setProperty('--y', `${y}px`);
+});
+        
         window.addEventListener('deviceorientation', (event) => {
     const card = document.querySelector('.glass-card');
     const tiltX = event.beta / 10; // Front to back
