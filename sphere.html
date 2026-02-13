@@ -1,87 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Our Universe</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #000; font-family: sans-serif; }
-        #msg {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 85%; text-align: center; color: #ff4d6d; z-index: 10;
-            pointer-events: none; transition: all 0.8s ease;
-        }
-        .secret-box {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px; border-radius: 20px; border: 1px solid #ff4d6d;
-            display: none; /* Hidden until double tap */
-        }
+        body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; }
+        #msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; text-align: center; color: #ff4d6d; z-index: 10; pointer-events: none; }
+        .secret { display: none; background: rgba(0,0,0,0.7); padding: 20px; border-radius: 20px; border: 1px solid #ff4d6d; }
     </style>
 </head>
 <body>
     <div id="msg">
-        <div id="normal-text">
-            <h2>You are my universe.</h2>
-            <p>Swipe to explore... <br> (Try double-tapping the stars)</p>
-        </div>
-        <div id="secret-text" class="secret-box">
-            <h2>The Secret Star ❤️</h2>
-            <p>I built this galaxy on my phone because you deserve the universe. I love you, BABE! MY EVERYTHING!</p>
-        </div>
+        <div id="hint"><h2>Our Galaxy</h2><p>Swipe to explore...<br>Double tap the stars</p></div>
+        <div id="secret" class="secret"><h2>The Secret Star ❤️</h2><p>Even though my laptop broke, I coded this on my phone because you deserve the universe. I love you so much BABE!</p></div>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer({ antialias: true });
+        var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // STARS
         var starGeo = new THREE.BufferGeometry();
         var starVex = [];
-        for (var i = 0; i < 2000; i++) {
-            starVex.push((Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500);
-        }
+        for(let i=0; i<2000; i++) { starVex.push((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, (Math.random()-0.5)*1000); }
         starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVex, 3));
-        var starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 1.5 });
+        var starMat = new THREE.PointsMaterial({color: 0xffffff, size: 1.2});
         var stars = new THREE.Points(starGeo, starMat);
         scene.add(stars);
 
-        // CORE HEART
-        var core = new THREE.Mesh(new THREE.SphereGeometry(12, 24, 24), new THREE.MeshBasicMaterial({ color: 0xff4d6d }));
+        var core = new THREE.Mesh(new THREE.SphereGeometry(10, 24, 24), new THREE.MeshBasicMaterial({color: 0xff4d6d}));
         scene.add(core);
-        camera.position.z = 400;
+        camera.position.z = 300;
 
         function animate() {
             requestAnimationFrame(animate);
             stars.rotation.y += 0.001;
-            core.rotation.x += 0.01;
+            core.scale.set(1 + Math.sin(Date.now()*0.002)*0.1, 1 + Math.sin(Date.now()*0.002)*0.1, 1);
             renderer.render(scene, camera);
         }
         animate();
 
-        // DOUBLE TAP LOGIC FOR MOBILE
-        let lastTap = 0;
-        document.addEventListener('touchend', function (e) {
-            let currentTime = new Date().getTime();
-            let tapLength = currentTime - lastTap;
-            if (tapLength < 300 && tapLength > 0) {
-                // SUCCESSFUL DOUBLE TAP
+        let last = 0;
+        document.addEventListener('touchend', (e) => {
+            let now = Date.now();
+            if (now - last < 300) {
                 starMat.color.setHex(0xffb3c1);
-                document.getElementById('normal-text').style.display = 'none';
-                document.getElementById('secret-text').style.display = 'block';
-                if (navigator.vibrate) navigator.vibrate(100);
-                e.preventDefault();
+                document.getElementById('hint').style.display = 'none';
+                document.getElementById('secret').style.display = 'block';
             }
-            lastTap = currentTime;
-        });
-
-        window.addEventListener('resize', function() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            last = now;
         });
     </script>
 </body>
