@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+        #text { white-space: pre-wrap; }
+        input { background: #000; color: #0f0; border: none; outline: none; font-family: monospace; font-size: 16px; width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="text"></div>
+    <div id="input-area" style="display:none">
+        > <input type="text" id="userInput" autofocus>
+    </div>
+
+<script>
+    const lines = ["> INITIALIZING VALENTINE_PROTOCOL...", "> BYPASSING FIREWALL...", "> ACCESSING HEART_DATABASE...", "> WILL YOU BE MY VALENTINE? (Type YES)"];
+    let i = 0;
+    function type() {
+        if (i < lines.length) {
+            document.getElementById("text").innerHTML += lines[i] + "<br>";
+            i++;
+            setTimeout(type, 1000);
+        } else {
+            document.getElementById("input-area").style.display = "block";
+            document.getElementById("userInput").focus();
+        }
+    }
+    type();
+
+    document.getElementById("userInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            if (this.value.toUpperCase() === "YES") {
+                window.location.href = "index.html"; // This sends her to your dashboard
+            } else {
+                alert("ERROR: Try again!");
+            }
+        }
+    });
+</script>
+</body>
+</html>
