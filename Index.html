@@ -3,46 +3,45 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; font-size: 14px; }
-        #text { white-space: pre-wrap; line-height: 1.6; }
-        input { background: #000; color: #0f0; border: none; outline: none; font-family: monospace; font-size: 16px; width: 100%; margin-top: 10px; }
+        body { margin: 0; background: #1a1a1a; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Arial', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
+            text-align: center; color: white; width: 80%; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .btn {
+            background: #ff4d6d; color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 20px;
+        }
+        .heart { position: absolute; color: #ff4d6d; pointer-events: none; animation: fall 3s linear; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
     </style>
 </head>
 <body>
-    <div id="text"></div>
-    <div id="input-area" style="display:none">> <input type="text" id="userInput" placeholder="Type here..." autofocus></div>
+    <div class="glass-card">
+        <h1>Hi Princess ❤️</h1>
+        <p id="counter">Loading our time...</p>
+        <a href="sphere.html" class="btn">Enter Our Galaxy</a>
+    </div>
 
 <script>
-    const lines = [
-        "> INITIALIZING VALENTINE_PROTOCOL_2026...",
-        "> SCANNING BIOMETRICS...",
-        "> MATCH FOUND: Manali ❤️",
-        "> BYPASSING SECURITY...",
-        "> WILL YOU BE MY VALENTINE? (Type YES)"
-    ];
-    let i = 0;
-    function type() {
-        if (i < lines.length) {
-            document.getElementById("text").innerHTML += lines[i] + "<br>";
-            i++;
-            setTimeout(type, 1000);
-        } else {
-            document.getElementById("input-area").style.display = "block";
-            document.getElementById("userInput").focus();
-        }
+    function updateCounter() {
+        const start = new Date("2024-01-01"); // UPDATE YOUR DATE HERE
+        const now = new Date();
+        const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+        document.getElementById("counter").innerHTML = `We have been together for <b>${diff}</b> beautiful days.`;
     }
-    type();
+    updateCounter();
 
-    document.getElementById("userInput").addEventListener("keypress", function(e) {
-        if (e.key === "Enter") {
-            if (this.value.toUpperCase() === "YES") {
-                document.getElementById("text").innerHTML += "<br>> ACCESS GRANTED. LOADING UNIVERSE...";
-                setTimeout(() => { window.location.href = "index.html"; }, 1500);
-            } else {
-                alert("ACCESS DENIED: Try 'YES'");
-            }
-        }
-    });
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️"; heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 10 + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
+    }, 400);
 </script>
 </body>
 </html>
